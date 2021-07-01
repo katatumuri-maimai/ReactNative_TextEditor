@@ -1,10 +1,11 @@
 // import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { FC, useEffect, useState} from 'react';
-import { StyleSheet, TextInput, View, Dimensions, StatusBar} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, StatusBar} from 'react-native';
 import MyTextArea from './components/TextArea';
 import MyPreview from './components/Preview';
 import MyPanel from './components/Panel';
+import MenuBar from './components/MenuBar';
 // import './styles/style.css';
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
   function AppStyle(){
     return ({
       flex: 1,
-      flexDirection: 'row',
+      flexDirection: 'column',
       flexWrap: 'wrap',
       alignItems: 'stretch',
       width: windowWidth,
@@ -41,6 +42,10 @@ export default function App() {
  
   return (
     <View style={AppStyle()}>
+      <MenuBar/>
+
+      <View style={styles.appArap}>
+    
       <StatusBar hidden={true}/>
         <MyPanel
         />
@@ -50,21 +55,18 @@ export default function App() {
         <MyPreview
         value={textInput}
         />
-      
+      </View>
     </View>
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//     alignItems: 'stretch',
-//     // width: '100%',
-//     // height: '100%',
-//     backgroundColor: 'black',
-//     // alignItems: 'center',
-//     // justifyContent: 'center',
-//   },
-// });
+const styles = StyleSheet.create({
+  appArap: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'stretch',
+    height: '100%',
+  },
+  
+});
