@@ -6,7 +6,6 @@ export default function MyPanel(props) {
 
   return (
       <Text style={styles.panel}>
-        {props.value}
       </Text>
       
   );
@@ -16,6 +15,8 @@ const styles = StyleSheet.create({
   panel:{
     flex: 1,
     backgroundColor: '#be5186',
-    height: '100%'
+    height: '100%',
+    padding: 20,
+    paddingTop: 20,
   }
 });

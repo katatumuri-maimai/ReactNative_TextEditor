@@ -1,7 +1,7 @@
 // import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { FC, useEffect, useState} from 'react';
-import { StyleSheet, TextInput, View, Dimensions} from 'react-native';
+import { StyleSheet, TextInput, View, Dimensions, StatusBar} from 'react-native';
 import MyTextArea from './components/TextArea';
 import MyPreview from './components/Preview';
 import MyPanel from './components/Panel';
@@ -29,6 +29,7 @@ export default function App() {
       width: windowWidth,
       height: windowHeight,
       backgroundColor: '#f3b4e0',
+      textAlign: 'left'
     })
   }
 
@@ -40,8 +41,8 @@ export default function App() {
  
   return (
     <View style={AppStyle()}>
+      <StatusBar hidden={true}/>
         <MyPanel
-        value="panel"
         />
       <MyTextArea
         onChange={text => onChange(text)}
@@ -49,6 +50,7 @@ export default function App() {
         <MyPreview
         value={textInput}
         />
+      
     </View>
   );
 }
