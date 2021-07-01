@@ -1,0 +1,21 @@
+.main_wrap{
+    display: flex;
+    flex-direction: row;
+
+}
+
+.textarea_main {
+    width: 40%;
+    color: #35071e;
+    border: none;
+    background-color: rgb(107, 76, 95);
+}
+
+.textarea_main::placeholder {
+    color: #be5186;
+
+}
+
+/* .preview_main{
+    background-color: #d188b5;
+} */

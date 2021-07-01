@@ -11,3 +11,14 @@ web-build/
 
 # macOS
 .DS_Store
+
+#My
+start-adb.ps1
+ports.ps1
+port-ip.ps1
+
+adb
+adb.eadb
+.vscode/launch.json
+
+_App.js
