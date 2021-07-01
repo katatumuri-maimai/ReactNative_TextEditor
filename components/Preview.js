@@ -13,7 +13,8 @@ export default function MyPreview(props) {
 
 const styles = StyleSheet.create({
   preview: {
-    width:'40%',
+    flex:2,
     backgroundColor: '#d188b5',
+    height: '100%'
   },
 });

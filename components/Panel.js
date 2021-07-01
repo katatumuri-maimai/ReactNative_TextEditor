@@ -14,7 +14,8 @@ export default function MyPanel(props) {
 
 const styles = StyleSheet.create({
   panel:{
-    width:'20%',
+    flex: 1,
     backgroundColor: '#be5186',
+    height: '100%'
   }
 });
