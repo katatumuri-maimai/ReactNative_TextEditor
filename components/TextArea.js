@@ -11,8 +11,6 @@ export default function MyTextArea(props) {
     return props.onChange(text)
   }
 
-
-
   return (
     <TextInput
       style={styles.container}
@@ -21,7 +19,7 @@ export default function MyTextArea(props) {
       textAlignVertical='top'
       onChangeText={text => onChange(text)}
       placeholder="Hello World!"
-      value={value}
+      value={props.value}
       />
   );
 };

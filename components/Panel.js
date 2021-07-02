@@ -2,20 +2,31 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, Pressable} from 'react-native';
 
 function FileList(props){
-  const data = props.data()
+  const data = props.data
+  let keys = []
   if (!data) {
     return (<Text>loading…🐌</Text>)
   }
-  // console.log('FileList>>' + data);
+  // console.log('FileList>>' + JSON.stringify(data));
 
+  function fileListOnPress(text){
+    props.fileListOnPress(text)
+    console.log(text);
+  }
+
+  
   return (
     <View style={styles.filelist} >
-      {data.map(e => {
-        console.log(e.name);
+      {data.map((e) => {
+        const key = Object.entries(e)[0][0]
+        const contens = e[key]
+        const title = contens.name.replace(/.md$/,'')
+        const text = contens.text
+
         return (
-          <Pressable key={e.name} style={styles.filelistBtn}>
+          <Pressable key={title} style={styles.filelistBtn} onPress={()=>{fileListOnPress(text)}}>
             <Text style={styles.filelistText} onPress={props.loadFileData}>
-              {e.name}
+              {title}
             </Text>
           </Pressable>
         )
@@ -31,10 +42,10 @@ export default function MyPanel(props) {
   return (
     <View style={styles.panelBody}>
       <View style={styles.panelMenu}>
-        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.loadFileData}>開く</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.createNewFile}>新規作成</Text></Pressable>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.saveFileData}>保存</Text></Pressable>
       </View>
-      <FileList data={props.data}/>
+      <FileList data={props.data} fileListOnPress={props.fileListOnPress}/>
     </View>
   );
 };
@@ -72,6 +83,7 @@ const styles = StyleSheet.create({
   },
   filelistBtn: {
     backgroundColor: '#fff2a1',
+    borderWidth: 0.5,
     shadowColor: 'black',
     elevation: 30,
     shadowOffset: { width: 2, height: 2 },

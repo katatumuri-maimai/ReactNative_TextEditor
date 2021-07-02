@@ -73,10 +73,10 @@ export async function GetAllData(){
     const json = await loadFileData({ key: key });
     // console.log(keys[i] + ">>" + loadFileData({ key: key }));
     if(!json===false){
-      data.push(await loadFileData({ key: key }))
+      data.push({[key]:await loadFileData({ key: key })})
       // console.log(await loadFileData({ key: key }));
     }
   }
-  // console.log('S 73>>' + JSON.stringify(data));
+  console.log('S 73>>' + JSON.stringify(data));
   return data
 }

@@ -8,10 +8,16 @@ import MyPanel from './components/Panel';
 import MenuBar from './components/MenuBar';
 import *as S from './components/Storage';
 
+
+
+
+
 export default function App() {
   const [windowWidth, setWidth] = useState(100)
   const [windowHeight, setHeight] = useState(100)
   const [textInput, setTextInput] = useState('')
+  const [data, setData] = useState([])
+  const [dataKey, setDataKey] = useState('')
 
   useEffect(() => {
     let Width = Dimensions.get('window').width;
@@ -19,49 +25,15 @@ export default function App() {
     setWidth(Width)
     setHeight(Height)
   }, []);
-  
-  function saveFileData(){
-    const firstRowEndPos = textInput.split('\n');
-    const filetitle = firstRowEndPos.filter(Boolean)[0]
-    S.saveFileData(S.fileData(filetitle, textInput))
-  }
 
-  function loadFileData(){
-    S.loadFileData({
-      key: 'mdfile',
-      id: 'id'})
-  }
+  useEffect(() => {
+    S.GetAllData().then(e => {
+      setData(e)
+      setDataKey(e)
+    })
+  }, []);
 
-  function GetAllData() {
-    const [data, setData] = useState('')
-    let fileList = []
-
-    useEffect(() => {
-      S.GetAllData().then(e => {
-        setData(e)
-      })
-    }, []);
-
-    return data
-    // console.log(data);
-
-    // if(!data){
-    //   return (<Text>loading…🐌</Text>)
-    // }
-
-    // console.log(data);
-
-    // return (
-    //   <Text>
-    //     {data.map(e=>{
-    //     console.log(e.name);
-    //       return <Text>{e.name}</Text>
-    //   })}
-    //   </Text>
-    // )
-  }
-
-  function AppStyle(){
+  function AppStyle() {
     return ({
       flex: 1,
       flexDirection: 'column',
@@ -74,6 +46,22 @@ export default function App() {
     })
   }
   
+  function saveFileData(){
+    const firstRowEndPos = textInput.split('\n');
+    const filetitle = firstRowEndPos.filter(Boolean)[0]
+    S.saveFileData(S.fileData(filetitle, textInput))
+  }
+
+  function createNewFile() {
+    S.loadFileData({
+      key: 'mdfile',
+      id: 'id'
+    })
+  }
+
+  function fileListOnPress(text) {
+    setTextInput(text)
+  }
 
 
   function onChange(text){
@@ -85,16 +73,18 @@ export default function App() {
     <View style={AppStyle()}>
       <MenuBar/>
 
-      <View style={styles.appArap}>
+      <View style={styles.appWrap}>
     
       <StatusBar hidden={true}/>
         <MyPanel
           saveFileData={saveFileData}
-          loadFileData={loadFileData}
-          data={GetAllData}
+          createNewFile={createNewFile}
+          data={data}
+          fileListOnPress={fileListOnPress}
         />
       <MyTextArea
-        onChange={text => onChange(text)}
+          onChange={text => onChange(text)}
+          value={textInput}
       />
         <MyPreview
         value={textInput}
@@ -104,8 +94,9 @@ export default function App() {
   );
 }
 
+
 const styles = StyleSheet.create({
-  appArap: {
+  appWrap: {
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
