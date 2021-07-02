@@ -1,7 +1,7 @@
 // import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { FC, useEffect, useState,useCallback} from 'react';
-import { StyleSheet, Text, View, Dimensions, StatusBar} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, StatusBar, Modal, Pressable} from 'react-native';
 import MyTextArea from './components/TextArea';
 import MyPreview from './components/Preview';
 import MyPanel from './components/Panel';
@@ -14,6 +14,8 @@ export default function App() {
   const [windowHeight, setHeight] = useState(100)
   const [textInput, setTextInput] = useState('')
   const [data, setData] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmit, setIsSubmit] = useState(false)
   const [dataKey, setDataKey] = useState(null)
 
 
@@ -45,21 +47,23 @@ export default function App() {
   }
   
   function saveFileData(){
+    setIsModalOpen(true)
+    if (!textInput === false) {
     const firstRowEndPos = textInput.split('\n');
-    const filetitle = firstRowEndPos.filter(Boolean)[0]
+    const filetitle = firstRowEndPos.filter(Boolean)[0].replace(/^#*/,'')
     let key = dataKey
 
     if (!key){
       key = 'SimpleMD' + data.length + 1
     }
-
-    if (!textInput===false){
       S.saveFileData(S.fileData(key, filetitle, textInput))
+      getAllData()
+      setIsSubmit(true)
     }else{
       console.log('テキストが入力されていません');
-    }
-    getAllData()
-  }
+      setIsSubmit(false)
+  }}
+    
 
   function createNewFile() {
     setTextInput("")
@@ -75,12 +79,36 @@ export default function App() {
   function onChange(text){
     setTextInput(text)
   }
+  function closeModal(){
+    setIsModalOpen(false)
+  }
 
 
  
   return (
     <View style={AppStyle()}>
       <MenuBar/>
+      <Modal
+        animationType={'slide'}
+        presentationStyle={false}
+        transparent={true}
+        visible={isModalOpen}
+        onRequestClose={()=>{
+          console.log('とじるんるん');
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modal}>
+            <Text>{isSubmit?"保存できました！":"保存できませんでした！"}</Text>
+            <Pressable
+            style={styles.modalBtn}
+            onPress={closeModal}
+            >
+              <Text style={styles.modalText}>閉じる</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
 
       <View style={styles.appWrap}>
     
@@ -113,5 +141,36 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     height: '100%',
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  modal: {
+    justifyContent: "center",
+    alignItems: "center",
+    width:300,
+    height:200,
+    backgroundColor:'#FFFFFF',
+    borderRadius: 10,
+    shadowColor: 'black',
+    elevation: 30,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+  },
+  modalBtn:{
+    backgroundColor: '#db6bbc',
+    width:100,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop:20,
+    marginBottom:-10,
+    borderRadius: 20,
+  },
+  modalText:{
+    color:'#FFFFFF'
+  }
   
 });
