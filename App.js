@@ -32,9 +32,30 @@ export default function App() {
       id: 'id'})
   }
 
-  function GetAllData(){
-    return(
-      <Text>a</Text>
+  function GetAllData() {
+    const [data, setData] = useState('')
+    let fileList = []
+
+    useEffect(() => {
+      S.GetAllData().then(e => {
+        setData(e)
+      })
+    }, []);
+    // console.log(data);
+
+    if(!data){
+      return (<Text>loading…🐌</Text>)
+    }
+
+    console.log(data);
+
+    return (
+      <Text>
+        {data.map(e=>{
+        console.log(e.name);
+          return <Text>{e.name}</Text>
+      })}
+      </Text>
     )
   }
 
@@ -69,7 +90,6 @@ export default function App() {
           saveFileData={saveFileData}
           loadFileData={loadFileData}
         />
-        <GetAllData/>
       <MyTextArea
         onChange={text => onChange(text)}
       />
