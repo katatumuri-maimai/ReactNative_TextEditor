@@ -7,13 +7,6 @@ function FileList(props){
   if (!data) {
     return (<Text>loading…🐌</Text>)
   }
-  // console.log('FileList>>' + JSON.stringify(data));
-
-  // function fileListOnPress(key, text){
-  //   props.fileListOnPress(key, text)
-  //   // console.log(text);
-  // }
-
   
   return (
     <View style={styles.filelist} >
@@ -43,7 +36,6 @@ export default function MyPanel(props) {
     <View style={styles.panelBody}>
       <View style={styles.panelMenu}>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.createNewFile}>新規作成</Text></Pressable>
-        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.reload}>更新</Text></Pressable>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.saveFileData}>保存</Text></Pressable>
       </View>
       <FileList data={props.data} fileListOnPress={props.fileListOnPress}/>

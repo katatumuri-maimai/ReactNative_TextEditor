@@ -11,13 +11,13 @@ import *as S from './components/Storage';
 
 
 
-
 export default function App() {
   const [windowWidth, setWidth] = useState(100)
   const [windowHeight, setHeight] = useState(100)
   const [textInput, setTextInput] = useState('')
   const [data, setData] = useState([])
   const [dataKey, setDataKey] = useState('')
+
 
   useEffect(() => {
     let Width = Dimensions.get('window').width;
@@ -68,9 +68,6 @@ export default function App() {
     setTextInput(text)
   }
 
-  function reload(){
-    App.reload()
-  }
 
  
   return (
@@ -82,7 +79,6 @@ export default function App() {
       <StatusBar hidden={true}/>
         <MyPanel
           saveFileData={saveFileData}
-          reload={reload}
           createNewFile={createNewFile}
           data={data}
           fileListOnPress={fileListOnPress}

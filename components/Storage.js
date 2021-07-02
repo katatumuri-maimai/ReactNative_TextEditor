@@ -38,6 +38,7 @@ export function fileData(dataKey,filetitle, filetext) {
 
 export function saveFileData(fileData) {
   storage.save(fileData);
+  storage.remove(fileData);
 }
 
 export async function loadFileData(fileData) {
