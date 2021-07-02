@@ -1,6 +1,6 @@
 // import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { FC, useEffect, useState} from 'react';
+import { FC, useEffect, useState,useCallback} from 'react';
 import { StyleSheet, Text, View, Dimensions, StatusBar} from 'react-native';
 import MyTextArea from './components/TextArea';
 import MyPreview from './components/Preview';
@@ -22,13 +22,14 @@ export default function App() {
     let Height = Dimensions.get('window').height;
     setWidth(Width)
     setHeight(Height)
+    getAllData()
   }, []);
 
-  useEffect(() => {
+  function getAllData(){
     S.GetAllData().then(e => {
-      setData(e)
-    })
-  }, []);
+        setData(e)
+      })
+  }
 
   function AppStyle() {
     return ({
@@ -57,6 +58,7 @@ export default function App() {
     }else{
       console.log('テキストが入力されていません');
     }
+    getAllData()
   }
 
   function createNewFile() {
