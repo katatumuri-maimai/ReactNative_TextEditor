@@ -41,22 +41,24 @@ export default function App() {
         setData(e)
       })
     }, []);
+
+    return data
     // console.log(data);
 
-    if(!data){
-      return (<Text>loading…🐌</Text>)
-    }
+    // if(!data){
+    //   return (<Text>loading…🐌</Text>)
+    // }
 
-    console.log(data);
+    // console.log(data);
 
-    return (
-      <Text>
-        {data.map(e=>{
-        console.log(e.name);
-          return <Text>{e.name}</Text>
-      })}
-      </Text>
-    )
+    // return (
+    //   <Text>
+    //     {data.map(e=>{
+    //     console.log(e.name);
+    //       return <Text>{e.name}</Text>
+    //   })}
+    //   </Text>
+    // )
   }
 
   function AppStyle(){
@@ -89,6 +91,7 @@ export default function App() {
         <MyPanel
           saveFileData={saveFileData}
           loadFileData={loadFileData}
+          data={GetAllData}
         />
       <MyTextArea
         onChange={text => onChange(text)}
