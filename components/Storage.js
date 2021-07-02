@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, Text, AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Storage from 'react-native-storage';
 
 //ストレージの設定
@@ -24,35 +23,38 @@ var storage = new Storage({
   }
 })
 
-function fileData(filename, filetext) {
-  filename = filename + '.md'
-  return {
+export function fileData(filetitle, filetext) {
+  const filename = filetitle + '.md'
+  const date = new Date().toLocaleString()
+  return ({
+    key: 'mdfile',
     id: 'id',
     data: {
       name: filename,
-      date: new Date(),
-      text: filetext,
+      date: date,
+      text: filetext
     }
-  }
+  })
 }
 
+export function saveFileData(fileData) {
+  storage.save(fileData);
+}
 
-export default function MyPanel(props) {
-  // const [value, onChangeText] = React.useState(props.value);
-
-  return (
-      <Text style={styles.panel}>
-      </Text>
-      
-  );
-};
-
-const styles = StyleSheet.create({
-  panel:{
-    flex: 1,
-    backgroundColor: '#be5186',
-    height: '100%',
-    padding: 20,
-    paddingTop: 20,
-  }
-});
+export function loadFileData(fileData) {
+  storage.load(fileData).then(ret => {
+    // ロードに成功したら
+    console.log(ret.name + ' is ' + ret.text);
+  }).catch(err => {
+    // ロードに失敗したら
+    console.warn(err.message);
+    switch (err.name) {
+      case 'NotFoundError':
+        // 見つかんなかった場合の処理を書こう
+        break;
+      case 'ExpiredError':
+        // キャッシュ切れの場合の処理を書こう
+        break;
+    }
+  });
+}

@@ -8,8 +8,8 @@ export default function MyPanel(props) {
   return (
     <View style={styles.panelBody}>
       <View style={styles.panelMenu}>
-        <Pressable style={styles.button}><Text style={styles.buttonText}>開く</Text></Pressable>
-        <Pressable style={styles.button}><Text style={styles.buttonText}>保存</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.loadFileData}>開く</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.saveFileData}>保存</Text></Pressable>
       </View>
     </View>
   );

@@ -6,7 +6,7 @@ import MyTextArea from './components/TextArea';
 import MyPreview from './components/Preview';
 import MyPanel from './components/Panel';
 import MenuBar from './components/MenuBar';
-// import './styles/style.css';
+import *as S from './components/Storage';
 
 export default function App() {
   const [windowWidth, setWidth] = useState(100)
@@ -20,6 +20,23 @@ export default function App() {
     setHeight(Height)
   }, []);
   
+  function saveFileData(){
+    const firstRowEndPos = textInput.split('\n');
+    const filetitle = firstRowEndPos.filter(Boolean)[0]
+    S.saveFileData(S.fileData(filetitle, textInput))
+  }
+
+  function loadFileData(){
+    S.loadFileData({
+      key: 'mdfile',
+      id: 'id'})
+  }
+
+  function GetAllData(){
+    return(
+      <Text>a</Text>
+    )
+  }
 
   function AppStyle(){
     return ({
@@ -33,12 +50,13 @@ export default function App() {
       textAlign: 'left'
     })
   }
+  
 
 
   function onChange(text){
     setTextInput(text)
   }
- 
+
  
   return (
     <View style={AppStyle()}>
@@ -48,7 +66,10 @@ export default function App() {
     
       <StatusBar hidden={true}/>
         <MyPanel
+          saveFileData={saveFileData}
+          loadFileData={loadFileData}
         />
+        <GetAllData/>
       <MyTextArea
         onChange={text => onChange(text)}
       />
