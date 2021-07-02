@@ -29,7 +29,6 @@ export default function App() {
   useEffect(() => {
     S.GetAllData().then(e => {
       setData(e)
-      setDataKey(e)
     })
   }, []);
 
@@ -49,7 +48,7 @@ export default function App() {
   function saveFileData(){
     const firstRowEndPos = textInput.split('\n');
     const filetitle = firstRowEndPos.filter(Boolean)[0]
-    S.saveFileData(S.fileData(filetitle, textInput))
+    S.saveFileData(S.fileData(dataKey,filetitle, textInput))
   }
 
   function createNewFile() {
@@ -59,13 +58,18 @@ export default function App() {
     })
   }
 
-  function fileListOnPress(text) {
+  function fileListOnPress(key, text) {
     setTextInput(text)
+    setDataKey(key)
   }
 
 
   function onChange(text){
     setTextInput(text)
+  }
+
+  function reload(){
+    App.reload()
   }
 
  
@@ -78,9 +82,11 @@ export default function App() {
       <StatusBar hidden={true}/>
         <MyPanel
           saveFileData={saveFileData}
+          reload={reload}
           createNewFile={createNewFile}
           data={data}
           fileListOnPress={fileListOnPress}
+
         />
       <MyTextArea
           onChange={text => onChange(text)}

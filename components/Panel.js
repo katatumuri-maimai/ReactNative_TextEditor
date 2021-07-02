@@ -9,10 +9,10 @@ function FileList(props){
   }
   // console.log('FileList>>' + JSON.stringify(data));
 
-  function fileListOnPress(text){
-    props.fileListOnPress(text)
-    console.log(text);
-  }
+  // function fileListOnPress(key, text){
+  //   props.fileListOnPress(key, text)
+  //   // console.log(text);
+  // }
 
   
   return (
@@ -24,7 +24,7 @@ function FileList(props){
         const text = contens.text
 
         return (
-          <Pressable key={title} style={styles.filelistBtn} onPress={()=>{fileListOnPress(text)}}>
+          <Pressable key={title} style={styles.filelistBtn} onPress={() => { props.fileListOnPress(key,text)}}>
             <Text style={styles.filelistText} onPress={props.loadFileData}>
               {title}
             </Text>
@@ -43,6 +43,7 @@ export default function MyPanel(props) {
     <View style={styles.panelBody}>
       <View style={styles.panelMenu}>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.createNewFile}>新規作成</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.reload}>更新</Text></Pressable>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.saveFileData}>保存</Text></Pressable>
       </View>
       <FileList data={props.data} fileListOnPress={props.fileListOnPress}/>

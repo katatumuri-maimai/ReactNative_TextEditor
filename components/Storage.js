@@ -23,12 +23,11 @@ var storage = new Storage({
   }
 })
 
-export function fileData(filetitle, filetext) {
+export function fileData(dataKey,filetitle, filetext) {
   const filename = filetitle + '.md'
   const date = new Date()
   return ({
-    key: 'mdfile',
-    id: 'id',
+    key: dataKey,
     data: {
       name: filename,
       date: date,
