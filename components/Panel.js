@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Pressable} from 'react-native';
 function FileList(props){
   const data = props.data
   let keys = []
+  
   if (!data) {
     return (<Text>loading…🐌</Text>)
   }
@@ -17,7 +18,7 @@ function FileList(props){
         const text = contens.text
 
         return (
-          <Pressable key={title} style={styles.filelistBtn} onPress={() => { props.fileListOnPress(key,text)}}>
+          <Pressable key={key} style={styles.filelistBtn} onPress={() => { props.fileListOnPress(key,text)}}>
             <Text style={styles.filelistText} onPress={props.loadFileData}>
               {title}
             </Text>

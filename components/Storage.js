@@ -38,7 +38,6 @@ export function fileData(dataKey,filetitle, filetext) {
 
 export function saveFileData(fileData) {
   storage.save(fileData);
-  storage.remove(fileData);
 }
 
 export async function loadFileData(fileData) {
@@ -77,6 +76,6 @@ export async function GetAllData(){
       // console.log(await loadFileData({ key: key }));
     }
   }
-  console.log('S 73>>' + JSON.stringify(data));
+  // console.log('S 73>>' + JSON.stringify(data));
   return data
 }

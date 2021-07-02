@@ -9,14 +9,12 @@ import MenuBar from './components/MenuBar';
 import *as S from './components/Storage';
 
 
-
-
 export default function App() {
   const [windowWidth, setWidth] = useState(100)
   const [windowHeight, setHeight] = useState(100)
   const [textInput, setTextInput] = useState('')
   const [data, setData] = useState([])
-  const [dataKey, setDataKey] = useState('')
+  const [dataKey, setDataKey] = useState(null)
 
 
   useEffect(() => {
@@ -48,14 +46,22 @@ export default function App() {
   function saveFileData(){
     const firstRowEndPos = textInput.split('\n');
     const filetitle = firstRowEndPos.filter(Boolean)[0]
-    S.saveFileData(S.fileData(dataKey,filetitle, textInput))
+    let key = dataKey
+
+    if (!key){
+      key = 'SimpleMD' + data.length + 1
+    }
+
+    if (!textInput===false){
+      S.saveFileData(S.fileData(key, filetitle, textInput))
+    }else{
+      console.log('テキストが入力されていません');
+    }
   }
 
   function createNewFile() {
-    S.loadFileData({
-      key: 'mdfile',
-      id: 'id'
-    })
+    setTextInput("")
+    setDataKey(null)
   }
 
   function fileListOnPress(key, text) {
