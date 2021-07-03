@@ -13,11 +13,12 @@ import *as FS from './components/MyFileSystem';
 export default function App() {
   const [windowWidth, setWidth] = useState(100)
   const [windowHeight, setHeight] = useState(100)
-  const [textInput, setTextInput] = useState('')
-  const [data, setData] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isSubmit, setIsSubmit] = useState(false)
+  const [data, setData] = useState([])
   const [dataKey, setDataKey] = useState(null)
+  const [textInput, setTextInput] = useState('')
+  const [fileName, setFileName] = useState('SimpleMarkdown.md')
 
 
   useEffect(() => {
@@ -50,14 +51,8 @@ export default function App() {
   function saveFileData(){
     setIsModalOpen(true)
     if (!textInput === false) {
-    const firstRowEndPos = textInput.split('\n');
-    const filetitle = firstRowEndPos.filter(Boolean)[0].replace(/^#*/,'')
-    let key = dataKey
 
-    if (!key){
-      key = 'SimpleMD' + data.length + 1
-    }
-      S.saveFileData(S.fileData(key, filetitle, textInput))
+      S.saveFileData(S.fileData(dataKey, fileName, textInput))
       getAllData()
       setIsSubmit(true)
     }else{
@@ -71,21 +66,34 @@ export default function App() {
     setDataKey(null)
   }
 
-  function fileListOnPress(key, text) {
-    setTextInput(text)
+  function fileListOnPress(key, filename, text) {
     setDataKey(key)
+    setFileName(filename)
+    setTextInput(text)
   }
 
 
   function onChange(text){
-    setTextInput(text)
-  }
+    if (!textInput === false) {
+      const firstRowEndPos = textInput.split('\n');
+      const filetitle = firstRowEndPos.filter(Boolean)[0].replace(/^#*/,'')
+      const filename = filetitle +'.md'
+      let key = dataKey
+
+      if (!key){
+        key = 'SimpleMD' + data.length + 1
+      }
+      setTextInput(text)
+      setDataKey(key)
+      setFileName(filename)
+  }}
+
   function closeModal(){
     setIsModalOpen(false)
   }
 
   function exportMdFile(){
-    FS.exportMdFile(dataKey, textInput)
+    FS.exportMdFile(fileName, textInput)
   }
 
 

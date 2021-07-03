@@ -3,28 +3,13 @@ import Storage from 'react-native-storage';
 
 //ストレージの設定
 var storage = new Storage({
-  // 最大容量, 1000がデフォルト 
   size: 1000,
-
-  // AsyncStorageを使う（WEBでもRNでも）。
-  // セットしないとリロードでデータが消えるよ。
   storageBackend: AsyncStorage,
-
-  // （たぶん）キャッシュの期限。デフォルトは一日(1000 * 3600 * 24 milliseconds).
-  // nullにも設定できて、期限なしの意味になるよ。
-  defaultExpires: 1000 * 3600 * 24,
-
-  // メモリにキャッシュするかどうか。デフォルトは true。
+  defaultExpires: null,
   enableCache: true,
-
-  // リモートシンクの設定（だと思う。）
-  sync: {
-    // これについては後述
-  }
 })
 
-export function fileData(dataKey,filetitle, filetext) {
-  const filename = filetitle + '.md'
+export function fileData(dataKey, filename, filetext) {
   const date = new Date()
   return ({
     key: dataKey,
@@ -42,11 +27,8 @@ export function saveFileData(fileData) {
 
 export async function loadFileData(fileData) {
   const data = await storage.load(fileData).then(ret => {
-    // ロードに成功したら
-    // console.log('S 47>>' + ret.name + ' is ' + JSON.stringify(ret));
     return ret
   }).catch(err => {
-    // ロードに失敗したら
     console.warn('S 54>>'+ JSON.stringify(fileData.key) + ">>>>" + err.message + ">>>>" +err);
     switch (err.name) {
       case 'NotFoundError':
@@ -57,8 +39,6 @@ export async function loadFileData(fileData) {
         break;
     }
   });
-  // console.log('S 63>>' + JSON.stringify(a));
-
   return data
 }
 
@@ -70,12 +50,9 @@ export async function GetAllData(){
   for(let i in keys){
     const key = keys[i];
     const json = await loadFileData({ key: key });
-    // console.log(keys[i] + ">>" + loadFileData({ key: key }));
     if(!json===false){
       data.push({[key]:await loadFileData({ key: key })})
-      // console.log(await loadFileData({ key: key }));
     }
   }
-  // console.log('S 73>>' + JSON.stringify(data));
   return data
 }

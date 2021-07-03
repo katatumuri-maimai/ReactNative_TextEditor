@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Pressable } from 'react-native';
 
 function FileList(props){
   const data = props.data
-  let keys = []
   
   if (!data) {
     return (<Text>loading…🐌</Text>)
@@ -14,11 +13,12 @@ function FileList(props){
       {data.map((e) => {
         const key = Object.entries(e)[0][0]
         const contens = e[key]
+        const filename = contens.name
         const title = contens.name.replace(/.md$/,'')
         const text = contens.text
 
         return (
-          <Pressable key={key} style={styles.filelistBtn} onPress={() => { props.fileListOnPress(key,text)}}>
+          <Pressable key={key} style={styles.filelistBtn} onPress={() => { props.fileListOnPress(key,filename,text)}}>
             <Text style={styles.filelistText} onPress={props.loadFileData}>
               {title}
             </Text>
