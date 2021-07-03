@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Pressable} from 'react-native';
+import { StyleSheet, Text, View, Pressable } from 'react-native';
+import saveMdFile from './MyFileSystem';
 
 function FileList(props){
   const data = props.data
@@ -38,6 +39,7 @@ export default function MyPanel(props) {
       <View style={styles.panelMenu}>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.createNewFile}>新規作成</Text></Pressable>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.saveFileData}>保存</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={saveMdFile}>ファイルに保存</Text></Pressable>
       </View>
       <FileList data={props.data} fileListOnPress={props.fileListOnPress}/>
     </View>
