@@ -4,7 +4,7 @@ import { Share } from 'react-native';
 
 export async function exportMdFile(filename,content){
   const directoryUri = FileSystem.cacheDirectory + 'SimpleMarkdown/'
-  const fileUri = await directoryUri + encodeURIComponent(deleteMarks(filename))
+  const fileUri = directoryUri + encodeURIComponent(removeMarks(filename))
   
 
   await FileSystem.makeDirectoryAsync(directoryUri, { intermediates: true })
@@ -48,12 +48,12 @@ export async function exportMdFile(filename,content){
 
 
 
-function deleteMarks(filename) {
-  const marks = ["\\", '/', ':', '*', '?', 'a', "<", ">", '|'];
-
-  for (const key in marks) {
-    console.log(key);
-      
+function removeMarks(filename) {
+  const marks = ["\\", '/', ':', '*', '?', 'a', "<", ">", '|', /^ */g, /^　*/g];
+  let filename_removeMarks = filename;
+  for (const i in marks) {
+    filename_removeMarks = filename_removeMarks.replaceAll(marks[i], '')
     }
+  return(filename_removeMarks);
   }
 
