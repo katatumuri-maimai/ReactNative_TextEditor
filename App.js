@@ -7,6 +7,7 @@ import MyPreview from './components/Preview';
 import MyPanel from './components/Panel';
 import MenuBar from './components/MenuBar';
 import *as S from './components/Storage';
+import *as FS from './components/MyFileSystem';
 
 
 export default function App() {
@@ -83,6 +84,10 @@ export default function App() {
     setIsModalOpen(false)
   }
 
+  function exportMdFile(){
+    FS.exportMdFile(dataKey, textInput)
+  }
+
 
  
   return (
@@ -118,7 +123,7 @@ export default function App() {
           createNewFile={createNewFile}
           data={data}
           fileListOnPress={fileListOnPress}
-
+          exportMdFile={exportMdFile}
         />
       <MyTextArea
           onChange={text => onChange(text)}
