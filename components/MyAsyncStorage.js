@@ -42,7 +42,7 @@ export async function loadFileData(fileData) {
   return data
 }
 
-export async function GetAllData(){
+export async function getAllData(){
     let data = []
     keys = await AsyncStorage.getAllKeys()
   // console.log(keys);
@@ -55,4 +55,14 @@ export async function GetAllData(){
     }
   }
   return data
+}
+
+export async function removeData(fileData){
+  storage.remove(fileData)
+    .then(e => {
+      console.log("removeData >>" + e);
+    }).catch(err => {
+      console.log(fileData);
+      console.error("removeData >>" + err);
+    })
 }

@@ -18,11 +18,18 @@ function FileList(props){
         const text = contens.text
 
         return (
-          <Pressable key={key} style={styles.filelistBtn} onPress={() => { props.fileListOnPress(key,filename,text)}}>
-            <Text style={styles.filelistText} onPress={props.loadFileData}>
+          <View key={key} >
+          <Pressable style={styles.filelistBtn} onPress={() => { props.fileListOnPress(key,filename,text)}}>
+            <Text style={styles.filelistText}>
               {title}
             </Text>
           </Pressable>
+            <Pressable style={styles.filelistBtn}>
+              <Text style={styles.filelistText} onPress={() => {props.removeData({key:key})}}>
+              ファイルを削除
+              </Text>
+              </Pressable>
+          </View>
         )
       })}
     </View>
@@ -37,10 +44,11 @@ export default function MyPanel(props) {
     <View style={styles.panelBody}>
       <View style={styles.panelMenu}>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.createNewFile}>新規作成</Text></Pressable>
-        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.saveFileData}>保存</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.onPlessSave}>保存</Text></Pressable>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.exportMdFile}>ファイルをエクスポート</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.fileSelect}>ファイルから開く</Text></Pressable>
       </View>
-      <FileList data={props.data} fileListOnPress={props.fileListOnPress}/>
+      <FileList data={props.data} fileListOnPress={props.fileListOnPress} removeData={props.removeData}/>
     </View>
   );
 };

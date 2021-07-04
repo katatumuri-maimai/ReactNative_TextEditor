@@ -6,7 +6,7 @@ import MyTextArea from './components/TextArea';
 import MyPreview from './components/Preview';
 import MyPanel from './components/Panel';
 import MenuBar from './components/MenuBar';
-import *as S from './components/Storage';
+import *as S from './components/MyAsyncStorage';
 import *as FS from './components/MyFileSystem';
 
 
@@ -18,7 +18,7 @@ export default function App() {
   const [data, setData] = useState([])
   const [dataKey, setDataKey] = useState(null)
   const [textInput, setTextInput] = useState('')
-  const [fileName, setFileName] = useState('SimpleMarkdown.md')
+  const [fileName, setFileName] = useState(null)
 
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function App() {
   }, []);
 
   function getAllData(){
-    S.GetAllData().then(e => {
+    S.getAllData().then(e => {
         setData(e)
       })
   }
@@ -47,12 +47,19 @@ export default function App() {
       textAlign: 'left'
     })
   }
-  
-  function saveFileData(){
-    setIsModalOpen(true)
-    if (!textInput === false) {
 
-      S.saveFileData(S.fileData(dataKey, fileName, textInput))
+  function onPlessSave() {
+    saveFileData(textInput,dataKey, fileName)
+  }
+  
+  function saveFileData(text,key,filename){
+    setIsModalOpen(true)
+    if (!text === false) {
+      const data = createFileData(text)
+      { !key ? key = data.key : key = key }
+      { !filename ? filename = data.filename : filename = filename }
+
+      S.saveFileData(S.fileData(key, filename, text))
       getAllData()
       setIsSubmit(true)
     }else{
@@ -64,29 +71,45 @@ export default function App() {
   function createNewFile() {
     setTextInput("")
     setDataKey(null)
+    setFileName(null)
   }
 
+  function createFileData(text){
+    let key = dataKey
+    let filename = fileName
+    if (!text === false) {
+
+      if (!filename){
+        const firstRowEndPos = text.split(/\n|\r/);
+        const filetitle = firstRowEndPos.filter(Boolean)[0].replace(/^#*/, '')
+        filename = filetitle + '.md'
+      }
+
+      if (!key) {
+        key = 'SimpleMD' + (data.length + 1)
+      }
+      setFileName(filename)
+      setDataKey(key)
+
+      return({
+        key: key,
+        filename: filename
+      })
+  }}
+
   function fileListOnPress(key, filename, text) {
+    setFileData(key, filename, text)
+  }
+
+  function setFileData(key, filename, text) {
     setDataKey(key)
     setFileName(filename)
     setTextInput(text)
   }
 
-
   function onChange(text){
-    if (!textInput === false) {
-      const firstRowEndPos = textInput.split('\n');
-      const filetitle = firstRowEndPos.filter(Boolean)[0].replace(/^#*/,'')
-      const filename = filetitle +'.md'
-      let key = dataKey
-
-      if (!key){
-        key = 'SimpleMD' + data.length + 1
-      }
       setTextInput(text)
-      setDataKey(key)
-      setFileName(filename)
-  }}
+  }
 
   function closeModal(){
     setIsModalOpen(false)
@@ -96,6 +119,33 @@ export default function App() {
     FS.exportMdFile(fileName, textInput)
   }
 
+  async function fileSelect() {
+    const filedata = await FS.fileSelect()
+    const filename = filedata.filename
+    const filecontent = filedata.filecontent
+    const key = 'SimpleMD' + (data.length + 1)
+
+    console.log('ini>fileSelect>dataKey>' + dataKey);
+    console.log('ini>fileSelect>textInput>' + textInput);
+    console.log('ini>fileSelect>fileName>' + fileName);
+
+    setFileData(key, filename, filecontent)
+
+
+
+    console.log('fileSelect>dataKey>' + dataKey);
+    console.log('fileSelect>textInput>' + textInput);
+    console.log('fileSelect>fileName>' + fileName);
+
+    if (key === dataKey && filecontent === textInput && filename === fileName){
+
+    saveFileData()
+  }}
+
+  async function removeData(fileData){
+    await S.removeData(fileData)
+    getAllData()
+  }
 
  
   return (
@@ -127,11 +177,13 @@ export default function App() {
     
       <StatusBar hidden={true}/>
         <MyPanel
-          saveFileData={saveFileData}
+          onPlessSave={onPlessSave}
           createNewFile={createNewFile}
           data={data}
           fileListOnPress={fileListOnPress}
           exportMdFile={exportMdFile}
+          fileSelect={fileSelect}
+          removeData={removeData}
         />
       <MyTextArea
           onChange={text => onChange(text)}

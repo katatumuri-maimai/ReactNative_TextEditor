@@ -1,6 +1,6 @@
 import * as FileSystem from 'expo-file-system';
-import * as MediaLibrary from 'expo-media-library';
 import { Share } from 'react-native';
+import * as DocumentPicker from 'expo-document-picker';
 
 export async function exportMdFile(filename,content){
   const directoryUri = FileSystem.cacheDirectory + 'SimpleMarkdown/'
@@ -28,6 +28,7 @@ export async function exportMdFile(filename,content){
   }).catch(err => {
     console.error("readAsStringAsync >>" +err);
   })
+
   await FileSystem.readDirectoryAsync(directoryUri)
     .then(e => {
       console.log("readDirectoryAsync >>"+ e);
@@ -57,3 +58,26 @@ function removeMarks(filename) {
   return(filename_removeMarks);
   }
 
+
+
+export async function fileSelect(){
+  const data = await DocumentPicker.getDocumentAsync()
+  const state = data.type
+
+  if(state == "success"){
+    const filename = data.name
+    const fileUri = data.uri
+
+    const filecontent = await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.UTF8 })
+      .then(e => {
+        console.log("readAsStringAsync >>" + e);
+        return e
+      }).catch(err => {
+        console.error("readAsStringAsync >>" + err);
+      })
+  
+  return({
+    filename: filename,
+    filecontent: filecontent
+  })
+}}
