@@ -164,6 +164,10 @@ export default function App() {
     getAllData()
   }
 
+  async function exportDirectry() {
+    await FS.exportDirectry()
+  }
+
  
   return (
     <View style={AppStyle()}>
@@ -201,6 +205,7 @@ export default function App() {
           exportMdFile={exportMdFile}
           fileSelect={fileSelect}
           removeData={removeData}
+          exportDirectry={exportDirectry}
         />
       <MyTextArea
           onChange={text => onChange(text)}

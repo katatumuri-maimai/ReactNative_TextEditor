@@ -45,8 +45,11 @@ export default function MyPanel(props) {
       <View style={styles.panelMenu}>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.createNewFile}>新規作成</Text></Pressable>
         <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.onPlessSave}>保存</Text></Pressable>
-        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.exportMdFile}>ファイルをエクスポート</Text></Pressable>
-        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.fileSelect}>ファイルから開く</Text></Pressable>
+        </View>
+      <View style={styles.panelMenu}>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.exportMdFile}>エクスポート</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.fileSelect}>開く</Text></Pressable>
+        <Pressable style={styles.button}><Text style={styles.buttonText} onPress={props.exportDirectry}>バックアップ</Text></Pressable>
       </View>
       <FileList data={props.data} fileListOnPress={props.fileListOnPress} removeData={props.removeData}/>
     </View>

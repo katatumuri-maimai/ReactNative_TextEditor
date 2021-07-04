@@ -47,6 +47,70 @@ export async function exportMdFile(filename,content){
   
 }
 
+export async function exportDirectry(filename, content) {
+  const documentFileUri = FileSystem.documentDirectory +'RCTAsyncLocalStorage/manifest.json'
+  const cacheDirectoryUri = FileSystem.cacheDirectory + 'SimpleMarkdown/BackupTemp/'
+  const dataList = []
+
+  const documents = await FileSystem.readAsStringAsync(documentFileUri, { encoding: FileSystem.EncodingType.UTF8 })
+    .then(e => {
+      // console.log("readAsStringAsync >>"+ e);
+      return JSON.parse(e)
+    }).catch(err => {
+      console.error(err);
+    })
+
+  for (const key in documents) {
+    const SimpleMD_key = /^SimpleMD.*/
+
+    if (SimpleMD_key.test(key)){
+      const data = await JSON.parse(documents[key])
+      dataList.push(await data.rawData);
+    }
+  }
+
+  dataList.map(async e =>{
+    const name = e.name
+    const content = e.text
+    const fileUri = cacheDirectoryUri + encodeURIComponent(removeMarks(name))
+
+    await FileSystem.makeDirectoryAsync(cacheDirectoryUri, { intermediates: true })
+      .then(e => {
+        console.log("makeDirectoryAsync" + e);
+      }).catch(err => {
+        console.error(err);
+      })
+
+    await FileSystem.writeAsStringAsync(fileUri, content, { encoding: FileSystem.EncodingType.UTF8 })
+      .then(e => {
+        console.log("writeAsStringAsync >>" + e);
+      }).catch(err => {
+        console.log(fileUri);
+        console.error("writeAsStringAsync >>" + err);
+      })
+
+    await FileSystem.readDirectoryAsync(cacheDirectoryUri)
+      .then(e => {
+        console.log("readDirectoryAsync >>"+ e);
+      }).catch(err => {
+        console.error(err);
+      })
+
+    
+  })
+
+  const shareUrl = await FileSystem.getContentUriAsync(cacheDirectoryUri)
+  console.log(shareUrl);
+  Share.share({ url: shareUrl })
+    .then(e => {
+      console.log(Share.sharedAction);
+    }).catch(err => {
+      console.error(err);
+    })
+
+  
+}
+
 
 
 function removeMarks(filename) {
