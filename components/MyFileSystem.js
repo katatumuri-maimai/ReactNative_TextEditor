@@ -24,14 +24,14 @@ export async function exportMdFile(filename,content){
 
   await FileSystem.readAsStringAsync(fileUri, { encoding: FileSystem.EncodingType.UTF8 })
     .then(e => {
-      console.log("readAsStringAsync >>" + e);
+      // console.log("readAsStringAsync >>" + e);
   }).catch(err => {
     console.error("readAsStringAsync >>" +err);
   })
 
   await FileSystem.readDirectoryAsync(directoryUri)
     .then(e => {
-      console.log("readDirectoryAsync >>"+ e);
+      // console.log("readDirectoryAsync >>"+ e);
     }).catch(err => {
       console.error(err);
     })

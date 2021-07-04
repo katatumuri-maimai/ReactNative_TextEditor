@@ -29,6 +29,8 @@ export default function App() {
     getAllData()
   }, []);
 
+  
+
   function getAllData(){
     S.getAllData().then(e => {
         setData(e)
@@ -52,10 +54,16 @@ export default function App() {
     saveFileData(textInput,dataKey, fileName)
   }
   
-  function saveFileData(text,key,filename){
+  function createNewFile() {
+    setTextInput("")
+    setDataKey(null)
+    setFileName(null)
+  }
+  
+  async function saveFileData(text,key,filename){
     setIsModalOpen(true)
     if (!text === false) {
-      const data = createFileData(text)
+      const data = await createFileData(text)
       { !key ? key = data.key : key = key }
       { !filename ? filename = data.filename : filename = filename }
 
@@ -68,15 +76,14 @@ export default function App() {
   }}
     
 
-  function createNewFile() {
-    setTextInput("")
-    setDataKey(null)
-    setFileName(null)
-  }
+  async function createFileData(text) {
+    console.log("createFileData>>"+dataKey);
+    console.log("createFileData>>" +fileName);
+    console.log("createFileData>>" +textInput);
 
-  function createFileData(text){
     let key = dataKey
     let filename = fileName
+    
     if (!text === false) {
 
       if (!filename){
@@ -86,7 +93,20 @@ export default function App() {
       }
 
       if (!key) {
-        key = 'SimpleMD' + (data.length + 1)
+        const keys = []
+        for (let e in data){
+          const keys_number = Object.entries(await data[e])[0][0].replace('SimpleMD','')
+          keys.push(Number(keys_number))
+        }
+        console.log(keys);
+        let max_number = Math.max(...keys)
+
+        if (keys.length == 0){
+          max_number = 0
+        }
+        
+        key = 'SimpleMD' + (max_number + 1)
+        console.log(key)
       }
       setFileName(filename)
       setDataKey(key)
@@ -101,7 +121,7 @@ export default function App() {
     setFileData(key, filename, text)
   }
 
-  function setFileData(key, filename, text) {
+  async function setFileData(key, filename, text) {
     setDataKey(key)
     setFileName(filename)
     setTextInput(text)
@@ -119,28 +139,25 @@ export default function App() {
     FS.exportMdFile(fileName, textInput)
   }
 
+
   async function fileSelect() {
     const filedata = await FS.fileSelect()
     const filename = filedata.filename
     const filecontent = filedata.filecontent
-    const key = 'SimpleMD' + (data.length + 1)
-
-    console.log('ini>fileSelect>dataKey>' + dataKey);
-    console.log('ini>fileSelect>textInput>' + textInput);
-    console.log('ini>fileSelect>fileName>' + fileName);
+    const key = null
 
     setFileData(key, filename, filecontent)
+  
+    console.log(dataKey);
+    console.log(fileName);
+    console.log(textInput);
 
-
-
-    console.log('fileSelect>dataKey>' + dataKey);
-    console.log('fileSelect>textInput>' + textInput);
-    console.log('fileSelect>fileName>' + fileName);
-
-    if (key === dataKey && filecontent === textInput && filename === fileName){
-
-    saveFileData()
-  }}
+    return ({
+      filename: filename,
+      filecontent: filecontent,
+      key: key
+    })
+  }
 
   async function removeData(fileData){
     await S.removeData(fileData)
